@@ -1,0 +1,1 @@
+# r_and_d_assets
