@@ -1,8 +1,8 @@
 ---
-data: cgvu:/reason?name=reasoning-card-examples&date-created=2026-09-22T13:18:00-06:00&source=https://www.irs.gov/pub/irs-regs/research_credit_basic_sec41.pdf
-meaning: Explanation of reasoning cards using IRS section 41(a) example
-structure: Unchanged, read-only
-world: Give this to an LLM to teach it how to make reasoning cards. This document is a *resource* that a reasoning card would point to. `cgvu` stands for Context Graph Virtual URI. In our case, our pointer (in the `data` facet) and resource are one file.
+data: "cgvu:/reason?name=reasoning-card-examples&date-created=2026-09-22T13:18:00-06:00&source=https://www.irs.gov/pub/irs-regs/research_credit_basic_sec41.pdf"
+meaning: "Explanation of reasoning cards using IRS section 41(a) example"
+structure: "Unchanged, read-only"
+world: "Give this to an LLM to teach it how to make reasoning cards. This document is a *resource* that a reasoning card would point to. `cgvu` stands for Context Graph Virtual URI. In our case, our pointer (in the `data` facet) and resource are one file."
 ---
 
 # Reasoning Cards Primer
