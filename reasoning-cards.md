@@ -24,11 +24,22 @@ Every table has the four facets: data, meaning, structure and world. The **struc
 
 With the worked example (QRE $1,000,000, base amount $600,000, basic research payments $50,000, all for 2025), the credit is $90,000 and the route is ACT. If you decline the question, the route is HALT, and the credit is never included on a guess.
 
-## For agents
-CRITICAL: 
+## For agents: What is a Reasoning Card
+
 
 1. Each Reasoning card is its own `cgvu` address, so we can only have one Reasoning Card per .MD file. This format will be just like this document: (A) YAML Frontmatter with the four facets of data, meaning, structure, and world and NOTHING ELSE, followed by (B) Any explanatory or other text helpful to add to the resource.
-2. Each reasoning card is a **route** in URI-valid syntax, a route handler would manage routing to a resource, because these are virtual URIs, the routing can be in the same file.
+2. A Reasoning Card is the resource a `reason` entry's address points to: a record with the same four facets as a Spike — `data` (its own address), `meaning` (why this step is taken, for a human), `structure` (the constraint or code a machine can run), `world` (how to run it in a real implementation) — that lives outside the object, is always fully filled, and is never looked inside by the proofs (spec §10).
+
+What that means in practice:
+
+- **It is a step, not a fact.** One card = one kind of reasoning step ("the excess, if any", "which year is this figure for?", "apply §41(a)(1)"). The `reason` log records *that* the step happened, at a trace index, by pointing at the card; the card says what the step *is*.
+- **It is documentation in a fixed shape.** The four facets are reused as a record format, not as a second measurement: a card's facets are always LIT. The instrument never reads inside a card; it only compares card addresses (bit E). That is why cards can hold anything — Lean, SQL, prose — without touching the proofs.
+- **It is reusable and countable.** Because the object holds only the address, the same card is pointed at by every step that applies it, across tasks and people. Counting how often each card address appears in `reason` logs is one of the few things meaningful on the nominal scale, and it is how "which reasoning recurs" is measured.
+- **A flash card**, in the spec's own words: a handler can process it automatically and a human can validate it by hand.
+
+Two things it is not: it is not an entry in the object (the entry is the address; the card is outside), and it is not a Spike (a Spike measures a datum and its facets can be DARK; a card documents a step and its facets never are).
+
+The interrogative cards (`who`, `what`, `when`, `where`, `why`, `how`, `which`, `whom`, `whose`, `wow`, `whatif`) are the fixed family of Reasoning Cards used to *ask*. `WOW` is asking about reflection and reflexive experiences such as learning, and `whatif` relates to imagination, predictions, and inference, The answer to one is an ordinary reasoning event (D14): a `reason` entry pointing at the card with the answer in its query string, plus one append to the facet it lights.
 
 ````text
 Use this document as a template to create Reasoning Cards if the user pastes regulation text.
