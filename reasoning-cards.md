@@ -1,28 +1,22 @@
 ---
-data: cgvu:/resource?name=reasoning-card-examples&date-created=2026-09-22T13:18:00-06:00&source=https://www.irs.gov/pub/irs-regs/research_credit_basic_sec41.pdf
+data: cgvu:/reason?name=reasoning-card-examples&date-created=2026-09-22T13:18:00-06:00&source=https://www.irs.gov/pub/irs-regs/research_credit_basic_sec41.pdf
 meaning: Explanation of reasoning cards using IRS section 41(a) example
 structure: Unchanged, read-only
 world: Give this to an LLM to teach it how to make reasoning cards. This document is a *resource* that a reasoning card would point to. `cgvu` stands for Context Graph Virtual URI. In our case, our pointer (in the `data` facet) and resource are one file.
 ---
 
 # Reasoning Cards Primer
-To decide, humans reason about data. What they still need in order to read that data is *context*. The instrument measures context on three facets beside the datum, so a Spike has four facets: (1) `data`, the anchoring observation; (2) `meaning`, human-readable definitions; (3) `structure`, constraints, validation and schema; and (4) `world`, whatever is needed to interpret meaning and structure under variable conditions (who, what, why, where, when and so on), written to the reader of the card. Context itself is the transition from an interpretation that is not sufficient for the decision to one that is.
-
-A reasoning card fills all four facets (§10), so its facets are never DARK. This resource adds one convention that is not part of the spec: if a facet does not apply, write `cgvu:/not-applicable`. Any non-empty string is LIT, so that sentinel is LIT by definition. It says "nothing to read here", not "unknown".
+To make a decision, humans reason about the data they have. What they still need in order to read that data is context: the transition from an interpretation insufficient for the decision to one sufficient for it. A Spike has four facets: data, the anchoring observation, and three context facets beside it — meaning: the human-readable definition; structure: constraints, validation, schema; world: what an interpreter needs to use the meaning and structure in the situation at hand (who, what, why, where, when), written for the reader of the card. A Reasoning Card reuses the same four facets as a record format (spec §10): a card's facets are always filled and never DARK. Where a facet has nothing to say, this document uses the address cgvu:/not-applicable; that is a convention of these resources, not of the spec, and it is LIT like any other address.
 
 ## For human readers
 
 This page turns the opening of 26 U.S.C. §41 into **reasoning cards**. Each card is a single step of reasoning, and its `cgvu:/` address is both its name and its instruction. The path names the handler that runs the card. The query string carries the variables the router passes to that handler. When a card needs another card, it refers to it by that card's `id`.
 
-There are three kinds of card, and each kind lands in a particular slot of the context object (D5):
+There are three kinds of card, and each kind's address lands in a different slot of the context object:
 
-- **Statute cards** match one line of the regulation: `irc-41-a`, `irc-41-a-1`, `irc-41-a-1-A`, `irc-41-a-1-B`, `irc-41-a-2` and `irc-41-b`. These are what `reason` entries point to.
-- **General cards** are acts the regulation relies on but never writes down: `math-excess` ("the excess, if any"), `math-percent` and `math-equivalence` (are two readings the same?). These also land in `reason`.
-- **Process cards** are the intent map together with the reason log:
-  - `chain-rd-credit-2025` and `decide-rd-credit` are **intent-map policy** (§8). They sit at `intent-map[0]` and `intent-map[1]` from the start.
-  - `ask-qre-year` asks you which taxable year your research expenses belong to. The question is a `reason` entry. Your answer is appended to the `world` facet of the QRE Spike in `observe`.
-  - The chain feeds your answer and the year check into the §41(a) computation and emits a new card, `result-rd-credit-2025`, which is recorded as a `reason` entry.
-  - `decide-rd-credit` reads that result and either includes the credit in §38, excludes it, asks again, or escalates. Each dispatch appends a `decide` entry.
+Statute cards transcribe one line of the regulation: irc-41-a, irc-41-a-1, irc-41-a-1-A, irc-41-a-1-B, irc-41-a-2 and irc-41-b. A reason entry points at one when a step applies that line.
+Arithmetic cards are acts the regulation relies on but never writes down: math-excess ("the excess, if any"), math-percent and math-equivalence (are two readings the same?). Also pointed at from reason.
+Policy and process cards run the decision. The chain (chain-rd-credit-2025) and the decision rule (decide-rd-credit) are intent-map policy (spec §8): the chain's address is intent-map[0]. The ask card (ask-qre-year) is an interrogative card (spec §10): asking it is an ASK route, the answer is a reason entry and an append to the DARK facet. The card the chain emits (result-rd-credit-2025) is a reason entry recording the chain's output; the decision reads it.
 
 The figures themselves (QRE, base amount) are `data` on Spikes in `observe`. Their years and interpretations are appended to those Spikes' context facets.
 
@@ -31,6 +25,10 @@ Every table has the four facets: data, meaning, structure and world. The **struc
 With the worked example (QRE $1,000,000, base amount $600,000, basic research payments $50,000, all for 2025), the credit is $90,000 and the route is ACT. If you decline the question, the route is HALT, and the credit is never included on a guess.
 
 ## For agents
+CRITICAL: 
+
+1. Each Reasoning card is its own `cgvu` address, so we can only have one Reasoning Card per .MD file. This format will be just like this document: (A) YAML Frontmatter with the four facets of data, meaning, structure, and world and NOTHING ELSE, followed by (B) Any explanatory or other text helpful to add to the resource.
+2. Each reasoning card is a **route** in URI-valid syntax, a route handler would manage routing to a resource, because these are virtual URIs, the routing can be in the same file.
 
 ````text
 Use this document as a template to create Reasoning Cards if the user pastes regulation text.
